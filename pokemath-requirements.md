@@ -13,7 +13,7 @@ How to use this file: each `PM-xx` section is one self-contained Kanban ticket. 
 - **G1** All visible UI text is **Ukrainian** (English only for English-task content). Suggested strings below are drafts and need a native-speaker review before release.
 - **G2** Text readability rules in `STATUS.md` are mandatory: font `"Andika","Verdana","Tahoma",sans-serif`; ≥22px body; line-height 1.4–1.5; no all-caps for running text (English task prompts/options stay uppercase); left-aligned; short lines.
 - **G3** Target users are 5-year-olds (non-readers or early readers) and 7-year-olds. Wrong answers are never punished: no lost progress, no red flashing, no negative sounds, no timers that fail the child.
-- **G4** Tap targets ≥ **48×48 px**. Layout must work at **360×640** (phone) up to desktop, with no horizontal scroll.
+- **G4** Tap targets ≥ **48×48 px**. Layout must work at **320×568** (phone) up to desktop, with no horizontal scroll. (Raised from 360×640 by PM-18.)
 - **G5** Meaning is never carried by colour alone (always icon or text too). Animations ≤ 3 flashes/second and respect `prefers-reduced-motion`.
 - **G6** **No data leaves the device.** No analytics, accounts or new network requests. (Only exceptions: the existing Pokémon artwork URL `ART`, and PM-15 caching it.)
 - **G7** Every new behaviour that can annoy (sound, voice, hints) must be switchable in Settings (PM-00) and default to a sensible value stated in the ticket.
@@ -40,7 +40,7 @@ How to use this file: each `PM-xx` section is one self-contained Kanban ticket. 
 | Wave | Tickets | Rule |
 |---|---|---|
 | 0 | **PM-00** Foundation | Blocks everything. Merge first. |
-| 1 (parallel) | PM-01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 15, 16, 17a | Each depends only on PM-00. |
+| 1 (parallel) | PM-01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 15, 16, 17a, 18 | Each depends only on PM-00. PM-18 merges right after PM-00 because it edits core layout CSS. |
 | 2 (parallel) | PM-14 (needs PM-10), PM-17b (needs PM-09), PM-17c | Start after their dependency is merged. |
 
 Soft dependencies (use only if present, feature-detect; never required): PM-03→PM-06 hints; PM-14→PM-12/13; PM-17b→PM-01 voice.
@@ -550,6 +550,83 @@ Soft dependencies (use only if present, feature-detect; never required): PM-03�
 
 ---
 
+## PM-18 · Adaptive UI for iPhone (Safari and Home Screen app)
+
+- **Stage:** 1 · **Wave:** 1 (merge early, right after PM-00, because it edits core layout CSS) · **Depends on:** PM-00 · **Soft dependencies:** PM-15 (icons, standalone mode), PM-06/07/12/17b/17c (their screens must follow the layout tokens defined here) · **Effort:** L · **Risk:** medium (touches shared CSS; iOS Safari quirks cannot be fully emulated on a desktop)
+- **Files new:** `src/css/00-layout.css` (layout tokens + safe-area variables), `src/js/features/ios-adapt.js`, `tests/test_pm_18.py`, `tests/devices.json` · **Files touched:** `src/index.template.html` (`<head>` meta tags), core CSS from PM-00 (menu, game, modal, catalog, topbar), `STATUS.md`
+
+**Goal.** The game fills an iPhone screen correctly in every size, in portrait and landscape, in a Safari tab and as a Home Screen app: nothing hidden behind the notch, Dynamic Island, home indicator or Safari toolbars; no accidental zoom or text selection while a child taps fast; every screen playable without page scroll. This ticket raises the minimum supported screen from **360×640** to **320×568** for all screens (see G4).
+
+**Requirements**
+
+### Viewport, meta and safe areas
+- **R1 [M] Head meta.** `viewport = width=device-width, initial-scale=1, viewport-fit=cover`. Do not set `maximum-scale` or `user-scalable=no` (pinch zoom stays available for accessibility). `-webkit-text-size-adjust: 100%` on `html`. `<meta name="theme-color">` per theme (day/night), updated when the theme toggles. `apple-mobile-web-app-capable` (and `mobile-web-app-capable`), `apple-mobile-web-app-status-bar-style = default`, `apple-mobile-web-app-title = "Покемати"` (shorten if needed to fit under the icon). `apple-touch-icon` link (180×180) only if the icon file exists; the icon files are owned by PM-15, so do not generate a second set here.
+- **R2 [M] Safe-area variables.** Define `--sat`, `--sar`, `--sab`, `--sal` from `env(safe-area-inset-*, 0px)`. Apply them to: the root container, topbar, bottom input area (keypad / option buttons), modals, toasts (PM-05/08), bottom sheets (PM-06), the finish screen (PM-12) and any fixed/sticky element. No interactive element may sit in an unsafe area.
+- **R3 [M] Test override.** With `?test=1&safe=<top>,<right>,<bottom>,<left>` (px) the four variables take those values, because desktop browsers do not emulate `env()`.
+- **R4 [M] Dynamic viewport height.** Page height uses `100dvh` with a `100vh` fallback (`@supports`). No gameplay layout depends on raw `100vh`. Content must not hide behind Safari's collapsing toolbars. Target iOS Safari 15.4+, and degrade gracefully on older versions (page may scroll, nothing breaks).
+
+### Fluid layout and sizing
+- **R5 [M] Layout tokens.** In `00-layout.css` define fluid tokens with `clamp()` (question size, answer size, key height, gap, card padding). New and existing screens use these tokens instead of fixed px values.
+- **R6 [M] Minimum text size.** No visible text smaller than 16px. Task text and buttons keep the readability rules in G2: body ≥ 22px at widths ≥ 375px and ≥ 20px at 320px; the question text may shrink with `clamp()` but not below 40px (question) at 320px width.
+- **R7 [M] Menu.** Below 600px width, the two age columns stack into one column (5 років first, then 7 років); each Math / English / game card is full width and ≥ 48px tall. Landscape phones may keep two columns.
+- **R8 [M] Game screen, portrait.** At every viewport in the test matrix, all of the following are visible at once with no page scroll: topbar, question, answer box or the 4 option buttons, feedback line, and the full keypad (4 rows). Key height is `clamp(48px, 8dvh, 72px)`; the keypad/options are pinned to the bottom (thumb zone) above the bottom safe area.
+- **R9 [M] Game screen, landscape.** Phone landscape (height 320–430px): two columns: question + answer + feedback on one side, keypad/options on the other. Left/right safe areas are respected (notch/Dynamic Island). Nothing is clipped; no page scroll.
+- **R10 [M] Modals, sheets and popups.** `max-height: calc(100dvh - var(--sat) - var(--sab) - 16px)`, internal vertical scroll when needed, Pokémon image sized `min(60vw, 40dvh)`, close/primary buttons always reachable and ≥ 48px. Applies to catch popup, Settings, collection-complete, PM-06 hint sheet, PM-12 finish screen.
+- **R11 [M] Catalog.** Responsive grid `repeat(auto-fill, minmax(140px, 1fr))`; the expanded evolution chain stays inside its card; no horizontal overflow at 320px. Pokémon images use `loading="lazy"`, `decoding="async"` and a reserved size (`aspect-ratio` or `width`/`height`) to avoid layout shift and keep iPhone memory use low.
+- **R12 [M] No dead ends in standalone mode.** The Home Screen app has no browser back button, so every screen has a visible in-app way back (menu/back button ≥ 48px, inside the safe area).
+
+### Touch behaviour
+- **R13 [M]** On all interactive elements: `touch-action: manipulation` (stops double-tap zoom, keeps pinch zoom), `-webkit-tap-highlight-color: transparent` plus a visible `:active` pressed state that appears within 100 ms.
+- **R14 [M]** On buttons, keypad, cards and game boards: `user-select: none` and `-webkit-touch-callout: none`. Text that an adult may want to copy (parent report from PM-14) stays selectable. Images inside buttons do not open the long-press image menu.
+- **R15 [M]** `overscroll-behavior-y: none` on the game screen (no rubber-band bounce while playing). Catalog, Settings and long modals still scroll normally.
+- **R16 [M]** Hover styles are wrapped in `@media (hover: hover)` so nothing sticks after a tap on touch screens. No feature depends on hover or on `navigator.vibrate` (not available on iOS Safari).
+
+### Audio, theme, fonts (interacts with other tickets)
+- **R17 [S] Audio unlock.** Provide `PM.unlockAudio()`: on the first touch/click it resumes `AudioContext` and primes `speechSynthesis` with an empty utterance; PM-01 and PM-04 call it before playing. It is a no-op when those features are absent. Verify on a real iPhone and document how the side (ringer) switch affects Web Audio and speech; do not assume.
+- **R18 [S] Theme default.** If no `pokemath_theme` is saved, start in the system `prefers-color-scheme`; a saved choice always wins.
+- **R19 [S] Font check.** Check which font actually renders on iPhone for "Andika". If Andika is not embedded or loaded, the stack falls back to Verdana (G2). If it would help readability, evaluate embedding a Cyrillic + Latin subset (woff2, base64) and measure the size increase before deciding; report numbers in the PR.
+
+### Tests and verification
+- **R20 [M] Viewport matrix in `tests/devices.json`** (CSS px, portrait; each also tested in landscape). Values are representative, so verify them against the device list of the test tool before relying on them:
+
+  | Viewport | Represents | Test safe area (top, bottom) |
+  |---|---|---|
+  | 320×568 | smallest supported (old SE) | 20, 0 |
+  | 375×667 | SE 2/3 | 20, 0 |
+  | 375×812 | notch, small | 47, 34 |
+  | 390×844 | notch, standard | 47, 34 |
+  | 393×852 | Dynamic Island | 59, 34 |
+  | 402×874 | newer Pro | 62, 34 |
+  | 430×932 | Plus/Max | 59, 34 |
+  | 440×956 | largest | 62, 34 |
+
+  Landscape: swap width/height, safe area left/right ≈ 47–62 px, bottom ≈ 21 px (representative, not exact).
+- **R21 [M] Automated checks** for each screen (menu, math with keypad, math with 4 buttons if PM-07 is present, English, catch popup, catalog with one chain expanded, Settings) at every matrix entry:
+  1. `scrollWidth <= clientWidth` (no horizontal overflow);
+  2. every interactive element's rect is ≥ 48×48;
+  3. game screen height ≤ viewport (no vertical scroll), portrait and landscape;
+  4. no interactive element overlaps the unsafe areas set by `?safe=`;
+  5. no visible text node < 16px.
+- **R22 [M] Tooling.** Use whatever PM-00's runner provides. Headless Chrome with `--window-size` is enough for checks 1–5; if the project adopts Playwright, add a WebKit run for the same checks (WebKit emulation is closer to Safari but not identical).
+- **R23 [M] Manual checklist on a real iPhone** (Safari tab and Home Screen app), recorded in the PR with device model and iOS version, or explicitly marked "not verified": rotate during a question; Safari toolbar collapse while scrolling the catalog; keypad reachable with one thumb; no stuck pressed states; no zoom on fast double taps; popups clear of the notch and home indicator; sound/voice after the first tap; every screen has a way back.
+
+**Acceptance criteria**
+- **AC1** Given each viewport in the matrix with the test safe area, when the game screen loads in portrait, then question, answer, keypad and feedback are fully visible with no scroll and no horizontal overflow.
+- **AC2** Given a landscape viewport of height 320–430px, then the game uses the two-column layout, nothing is clipped, and no interactive element overlaps the left/right safe areas.
+- **AC3** Given `?safe=59,0,34,0`, then the topbar content starts below 59px and the keypad's last row ends above the bottom 34px.
+- **AC4** Given a 320×568 viewport, then the menu shows one column with the 5-year column first, and no text is smaller than 16px.
+- **AC5** Given the catch popup on a 375×667 viewport, then the popup fits within the visible height, scrolls internally if needed, and its close button is reachable.
+- **AC6** Given the catalog with 98 families, then only images near the viewport are requested at load (lazy), and the layout does not shift when images arrive.
+- **AC7** Given two quick taps on a key, then the page does not zoom, and no text is selected.
+- **AC8** Given the Home Screen app mode, then every screen has a visible in-app back/menu control.
+- **AC9** Given the existing suite, then it still passes (E2).
+
+**Out of scope.** iPad-specific layouts, native iOS app, haptics, Dynamic Island interactions, push notifications, App Store packaging, Android-specific tuning (it will mostly benefit, but is not tested here).
+
+**Notes for the implementer.** Browsers on iPhone are all WebKit-based, so Safari behaviour is what matters, including Chrome on iOS. Do not hand-edit generated `index.html` (PM-00); edit `src/` and rebuild. If a layout choice for PM-06/07/12/17b/17c conflicts with the tokens in `00-layout.css`, change the tokens, not the other tickets' logic, and tell the owner of the conflicting ticket in the PR.
+
+---
+
 ## Appendix A · Storage keys (existing + planned)
 
 | Key | Owner | Content |
@@ -588,3 +665,4 @@ Soft dependencies (use only if present, feature-detect; never required): PM-03�
 | PM-17a | More word themes | M | 00 |
 | PM-17b | Memory-pairs mini-game | M | 09 |
 | PM-17c | Number-line mini-game | M | 00 |
+| PM-18 | Adaptive UI for iPhone | L | 00 |

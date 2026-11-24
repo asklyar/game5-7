@@ -1,0 +1,110 @@
+<div class="wrap">
+
+  <!-- ===== MENU ===== -->
+  <section id="menu" class="screen active">
+    <h1>⚡ Математичні Покемони ⚡</h1>
+    <p class="center muted">Вирішуй приклади, вчи англійську та збирай колекцію покемонів!</p>
+    <div class="menu-columns">
+      <div class="menu-col">
+        <h2 class="col-title">🌱 5 років · 0 клас</h2>
+        <div class="level-card">
+          <h2>➕ Математика</h2>
+          <div class="desc">Додавання і віднімання<br>до числа 20</div>
+          <button class="btn green" onclick="startGame(5, 'math')">Грати</button>
+        </div>
+        <div class="level-card">
+          <h2>🔤 English</h2>
+          <div class="desc">Тварини, кольори та числа<br>англійською</div>
+          <button class="btn green" onclick="startGame(5, 'en')">Грати</button>
+        </div>
+      </div>
+      <div class="menu-col">
+        <h2 class="col-title">🚀 7 років · 2 клас</h2>
+        <div class="level-card">
+          <h2>➕ Математика</h2>
+          <div class="desc">Додавання і віднімання до 60<br>та множення до 10</div>
+          <button class="btn blue" onclick="startGame(7, 'math')">Грати</button>
+        </div>
+        <div class="level-card">
+          <h2>🔤 English</h2>
+          <div class="desc">Їжа, часи, дії та тварини<br>англійською</div>
+          <button class="btn blue" onclick="startGame(7, 'en')">Грати</button>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn" onclick="openCatalog()">📖 Каталог</button>
+    </div>
+    <div class="menu-theme-row">
+      <button class="theme-toggle" id="menuThemeBtn" onclick="toggleTheme()">🌙 Нічний режим</button>
+    </div>
+  </section>
+
+  <!-- ===== GAME ===== -->
+  <section id="game" class="screen">
+    <div class="topbar">
+      <span class="stats" id="levelLabel">Рівень 5</span>
+      <span class="stats">Стикування: <b id="score">0</b></span>
+      <span class="stats">Знайдено: <b id="caughtCount">0</b></span>
+      <button class="theme-toggle small" id="gameThemeBtn" onclick="toggleTheme()">🌙</button>
+      <button class="btn small red" onclick="goMenu()">🏠 Меню</button>
+    </div>
+
+    <div class="question-box">
+      <div class="question-label">Обери правильну відповідь!</div>
+      <div class="question" id="question">2 + 3 = ?</div>
+      <div class="answer-area empty" id="answerArea">?</div>
+      <div class="feedback" id="feedback"></div>
+    </div>
+
+    <div class="keypad" id="keypad">
+      <button class="key" onclick="pressKey('7')">7</button>
+      <button class="key" onclick="pressKey('8')">8</button>
+      <button class="key" onclick="pressKey('9')">9</button>
+      <button class="key del" onclick="delKey()">⌫</button>
+      <button class="key" onclick="pressKey('4')">4</button>
+      <button class="key" onclick="pressKey('5')">5</button>
+      <button class="key" onclick="pressKey('6')">6</button>
+      <button class="key clear" onclick="clearKey()">C</button>
+      <button class="key" onclick="pressKey('1')">1</button>
+      <button class="key" onclick="pressKey('2')">2</button>
+      <button class="key" onclick="pressKey('3')">3</button>
+      <button class="key check" onclick="checkAnswer()">✓</button>
+      <button class="key wide" style="grid-column: span 4;" onclick="pressKey('0')">0</button>
+    </div>
+
+    <div class="english-area" id="englishArea" style="display:none;">
+      <div class="en-options" id="enOptions"></div>
+    </div>
+  </section>
+
+  <!-- ===== CATALOG ===== -->
+  <section id="catalog" class="screen">
+    <div class="catalog-head">
+      <h2 style="margin:0;font-size:30px;">📖 Мій каталог</h2>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <button class="theme-toggle small" id="catalogThemeBtn" onclick="toggleTheme()">🌙</button>
+        <button class="btn small" onclick="goMenu()">🏠 Меню</button>
+      </div>
+    </div>
+    <p class="center muted" id="catalogStats">Колекція</p>
+    <div class="catalog-grid" id="catalogGrid"></div>
+  </section>
+
+</div>
+
+<!-- Catch overlay -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="poke-emoji" id="modalEmoji" style="font-size:90px;">🦖</div>
+    <img id="modalImg" src="" alt="покемон" style="display:block;width:220px;height:220px;margin:0 auto;object-fit:contain;image-rendering:pixelated;">
+    <div class="poke-name" id="modalName">Пікачу</div>
+    <div class="stars" id="modalStars">★★★</div>
+    <div class="ability-note" id="modalAbility"></div>
+    <div class="evo-note" id="modalEvo"></div>
+    <div class="row">
+      <button class="btn green" onclick="closeModal()">Далі!</button>
+      <button class="btn" onclick="closeModalOpenCatalog()">📖 Каталог</button>
+    </div>
+  </div>
+</div>
