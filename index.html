@@ -11,41 +11,41 @@
 
   <!-- ===== MENU ===== -->
   <section id="menu" class="screen active">
-    <h1>⚡ Математичні Покемони ⚡</h1>
-    <p class="center muted">Вирішуй приклади, вчи англійську та збирай колекцію покемонів!</p>
+    <h1 data-i18n="app.title">⚡ Математичні Покемони ⚡</h1>
+    <p class="center muted" data-i18n="app.description">Вирішуй приклади, вчи англійську та збирай колекцію покемонів!</p>
     <div class="menu-columns">
       <div class="menu-col">
-        <h2 class="col-title">🌱 5 років · 0 клас</h2>
+        <h2 class="col-title" data-i18n="menu.grade0">🌱 5 років · 0 клас</h2>
         <div class="level-card">
-          <h2>➕ Математика</h2>
-          <div class="desc">Додавання і віднімання<br>до числа 20</div>
-          <button class="btn green" data-testid="start-math-5" data-action="start" data-arg="5,math">Грати</button>
+          <h2 data-i18n="menu.math">➕ Математика</h2>
+          <div class="desc" data-i18n-html="menu.math0.desc">Додавання і віднімання<br>до числа 20</div>
+          <button class="btn green" data-testid="start-math-5" data-action="start" data-arg="5,math" data-i18n="menu.play">Грати</button>
         </div>
         <div class="level-card">
-          <h2>🔤 English</h2>
-          <div class="desc">Тварини, кольори та числа<br>англійською</div>
-          <button class="btn green" data-testid="start-en-5" data-action="start" data-arg="5,en">Грати</button>
+          <h2 data-i18n="menu.eng">🔤 English</h2>
+          <div class="desc" data-i18n-html="menu.eng0.desc">Тварини, кольори та числа<br>англійською</div>
+          <button class="btn green" data-testid="start-en-5" data-action="start" data-arg="5,en" data-i18n="menu.play">Грати</button>
         </div>
       </div>
       <div class="menu-col">
-        <h2 class="col-title">🚀 7 років · 2 клас</h2>
+        <h2 class="col-title" data-i18n="menu.grade2">🚀 7 років · 2 клас</h2>
         <div class="level-card">
-          <h2>➕ Математика</h2>
-          <div class="desc">Додавання і віднімання до 60<br>та множення до 10</div>
-          <button class="btn blue" data-testid="start-math-7" data-action="start" data-arg="7,math">Грати</button>
+          <h2 data-i18n="menu.math">➕ Математика</h2>
+          <div class="desc" data-i18n-html="menu.math2.desc">Додавання і віднімання до 60<br>та множення до 10</div>
+          <button class="btn blue" data-testid="start-math-7" data-action="start" data-arg="7,math" data-i18n="menu.play">Грати</button>
         </div>
         <div class="level-card">
-          <h2>🔤 English</h2>
-          <div class="desc">Їжа, часи, дії та тварини<br>англійською</div>
-          <button class="btn blue" data-testid="start-en-7" data-action="start" data-arg="7,en">Грати</button>
+          <h2 data-i18n="menu.eng">🔤 English</h2>
+          <div class="desc" data-i18n-html="menu.eng2.desc">Їжа, часи, дії та тварини<br>англійською</div>
+          <button class="btn blue" data-testid="start-en-7" data-action="start" data-arg="7,en" data-i18n="menu.play">Грати</button>
         </div>
       </div>
     </div>
     <div class="row">
-      <button class="btn" data-action="open-catalog">📖 Каталог</button>
+      <button class="btn" data-action="open-catalog" data-i18n="menu.catalog">📖 Каталог</button>
     </div>
     <div class="menu-theme-row">
-      <button class="theme-toggle" id="menuThemeBtn" data-action="toggle-theme">🌙 Нічний режим</button>
+      <button class="theme-toggle" id="menuThemeBtn" data-action="toggle-theme" data-i18n="theme.night">🌙 Нічний режим</button>
     </div>
   </section>
 
@@ -53,14 +53,14 @@
   <section id="game" class="screen">
     <div class="topbar">
       <span class="stats" id="levelLabel">Рівень 5</span>
-      <span class="stats">Стикування: <b id="score">0</b></span>
-      <span class="stats">Знайдено: <b id="caughtCount">0</b></span>
+      <span class="stats"><span data-i18n="game.score">Стикування:</span> <b id="score">0</b></span>
+      <span class="stats"><span data-i18n="game.caught">Знайдено:</span> <b id="caughtCount">0</b></span>
       <button class="theme-toggle small" id="gameThemeBtn" data-action="toggle-theme">🌙</button>
-      <button class="btn small red" data-action="go-menu">🏠 Меню</button>
+      <button class="btn small red" data-action="go-menu" data-i18n="game.menu">🏠 Меню</button>
     </div>
 
     <div class="question-box">
-      <div class="question-label">Обери правильну відповідь!</div>
+      <div class="question-label" data-i18n="game.question.math">Обери правильну відповідь!</div>
       <div class="question" id="question">2 + 3 = ?</div>
       <div class="answer-area empty" id="answerArea">?</div>
       <div class="feedback" id="feedback"></div>
@@ -93,7 +93,7 @@
       <h2 style="margin:0;font-size:30px;">📖 Мій каталог</h2>
       <div style="display:flex;gap:10px;align-items:center;">
         <button class="theme-toggle small" id="catalogThemeBtn" data-action="toggle-theme">🌙</button>
-        <button class="btn small" data-action="go-menu">🏠 Меню</button>
+        <button class="btn small" data-action="go-menu" data-i18n="game.menu">🏠 Меню</button>
       </div>
     </div>
     <p class="center muted" id="catalogStats">Колекція</p>
@@ -125,6 +125,7 @@
 <script src="js/core/store.js"></script>
 <script src="js/core/rng.js"></script>
 <script src="js/core/settings.js"></script>
+<script src="js/core/strings.js"></script>
 <script src="js/features/no-repeat.js"></script>
 <script src="js/features/sound.js"></script>
 <script src="js/game.js"></script>

@@ -43,7 +43,7 @@ function applyTheme(night){
   var body = document.body;
   if (night) body.classList.add("night");
   else body.classList.remove("night");
-  var label = night ? "☀️ День" : "🌙 Нічний режим";
+  var label = night ? PM.t("theme.day") : PM.t("theme.night");
   var shortLabel = night ? "☀️" : "🌙";
   var menuBtn = document.getElementById("menuThemeBtn");
   var gameBtn = document.getElementById("gameThemeBtn");
@@ -65,17 +65,23 @@ function restoreTheme(){
   applyTheme(night);
 }
 restoreTheme();
+updateLevelLabel();
 
 /* ============ MENU / NAV ============ */
 function startGame(level, mode){
   LEVEL = level;
   MODE = (mode === "en") ? "en" : "math";
   loadGame(level);
-  document.getElementById("levelLabel").textContent =
-    "Рівень " + level + (MODE === "en" ? " · English" : "");
+  updateLevelLabel();
   updateStats();
   show("game");
   newQuestion();
+}
+function updateLevelLabel(){
+  document.getElementById("levelLabel").textContent = PM.t("game.level", {
+    level: LEVEL,
+    suffix: MODE === "en" ? PM.t("game.english") : ""
+  });
 }
 function goMenu(){ show("menu"); }
 function openCatalog(){ buildCatalog(); show("catalog"); }

@@ -13,7 +13,7 @@ function newQuestion(){
     keypad.style.display = "none";
     answerArea.style.display = "none";
     enArea.style.display = "block";
-    if (label) label.textContent = "Обери правильний переклад!";
+    if (label) label.textContent = PM.t("game.question.en");
     newEnglishQuestion();
     return;
   }
@@ -22,7 +22,7 @@ function newQuestion(){
   keypad.style.display = "grid";
   answerArea.style.display = "block";
   enArea.style.display = "none";
-  if (label) label.textContent = "Обери правильну відповідь!";
+  if (label) label.textContent = PM.t("game.question.math");
   inputStr = "";
   renderMathQuestion();
   renderAnswer();
@@ -117,7 +117,7 @@ function checkEnglish(opt){
       if (buttons[i].textContent === question.en.toUpperCase()) buttons[i].classList.add("correct");
       buttons[i].onclick = null;
     }
-    fb("Молодець! ✅", "good");
+    fb(PM.t("game.praise"), "good");
     if (PM && PM.emit) PM.emit("answer:correct");
     score++;
     caught++;
@@ -127,7 +127,7 @@ function checkEnglish(opt){
     for (var k=0;k<buttons.length;k++){
       if (buttons[k].textContent === opt.toUpperCase()) buttons[k].classList.add("wrong");
     }
-    fb("Спробуй ще! ❌", "bad");
+    fb(PM.t("game.retry"), "bad");
     if (PM && PM.emit) PM.emit("answer:wrong");
   }
 }
@@ -156,20 +156,20 @@ function renderAnswer(){
 /* ============ CHECK ============ */
 function checkAnswer(){
   if (inputStr === ""){
-    fb("Обери відповідь!", "bad");
+    fb(PM.t("game.pickAnswer"), "bad");
     return;
   }
   var val = parseInt(inputStr, 10);
   var fbEl = document.getElementById("feedback");
   if (val === question.correct){
-    fb("Молодець! ✅", "good");
+    fb(PM.t("game.praise"), "good");
     if (PM && PM.emit) PM.emit("answer:correct");
     score++;
     caught++;
     updateStats();
     catchPokemon();
   } else {
-    fb("Спробуй ще! ❌", "bad");
+    fb(PM.t("game.retry"), "bad");
     if (PM && PM.emit) PM.emit("answer:wrong");
     // do not advance, let child retry
   }
