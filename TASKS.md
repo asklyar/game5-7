@@ -21,6 +21,17 @@ Context: the user had already deleted many non-game files from the working tree 
 - **Deviations from T01's literal "Done when"** (all caused by the user's "keep as is" choices): `autotest.py` lives in `tests/`, not root; `TASKS.md` is untracked; `.DS_Store` stays on disk but is gitignored.
 - **NOT verified by the agent:** a real in-browser render / play-through of the game (substituted an HTTP 200 + title check instead).
 - Root now holds: `index.html`, `src/`, `tests/`, `_archive/`, `README.md`, `.gitignore` (+ untracked `TASKS.md`, on-disk `.DS_Store`).
+### T02 - T14 - DONE  2026-11-26, withot records in this file
+
+### T15 · Skill registry + question runner — DONE 2026-11-26
+- **Created** `js/skills/registry.js`: `PM.skills.register/get/list(filter)/next(ids, ctx)/validate(item)`.
+  - `register` rejects a duplicate id (and a non-function `generate`, bad `subject`/`grade`); defaults `tiers` to 1.
+  - `validate` checks the §1 contract: non-empty `key` string, `prompt.text` non-empty string, `input` ∈ {keypad,choice,tiles}, non-null `answer`, and for `choice` a non-empty array of unique-labelled `{label, emoji?}` options that includes the answer.
+  - `next` picks a skill with the seeded `PM.rnd()` (falls back to a caller-supplied `ctx.rnd`), calls `generate(ctx)`, then `validate`s and returns the item; unknown ids throw.
+- **Created** `tests/unit/registry.test.js` (7 tests, node --test via `vm`): register/get/list, duplicate-id rejected, invalid item rejected, `next` deterministic per seed (and differing across seeds), unknown id rejected, contract violation throws. All pass.
+- **Deviation from T15's literal "Files" (which listed only the two new files):** also added one `<script src="js/skills/registry.js">` line to `index.html` (after `js/core/strings.js`, before the features), matching the T12/T13 precedent so the module actually loads. It is inert at load time (only defines `PM.skills`; no DOM, no `generate` call), so the e2e baseline stays green.
+- **Verified:** `npm test` green — 32 unit + 6 e2e. `registry.js` served 200; smoke test reports no console errors.
+- **NOT verified by the agent:** no in-browser play-through (registry is not yet wired into `js/game.js`; that is T16).
 
 ## 0. Executive summary (read first)
 
