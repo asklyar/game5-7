@@ -80,6 +80,19 @@ npm run test:e2e     # Playwright, chromium, serves the repo on port 4173
 The unit suite is plain `node:test` (Node 18+). Playwright starts
 `python3 -m http.server 4173` automatically when running the e2e tests.
 
+## Saves (localStorage)
+
+All keys use the `pokemath_` prefix and never leave the device.
+
+| Key | Meaning |
+| --- | --- |
+| `pokemath_schema` | storage schema version (currently `1`) |
+| `pokemath_profile_g0` | grade 0 profile: `{collection, score, caught}` |
+| `pokemath_profile_g2` | grade 2 profile: `{collection, score, caught}` |
+| `pokemath_settings` | settings object |
+| `pokemath_theme` | `day` or `night` |
+| `pokemath_l5`, `pokemath_l7` | legacy saves, read once for migration and kept untouched |
+
 ## Disclaimer
 
 Fan-made, non-commercial educational project. Pokémon is © Nintendo /

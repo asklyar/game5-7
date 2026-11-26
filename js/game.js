@@ -20,20 +20,15 @@ function show(id){
   document.getElementById(id).classList.add("active");
 }
 
-/* ============ PERSISTENCE (localStorage) ============ */
-function saveKey(){ return "pokemath_l" + LEVEL; }
+/* ============ PERSISTENCE (versioned store, v1) ============ */
+function gradeForLevel(level){ return level === 5 ? 0 : 2; }
 function saveGame(){
-  try {
-    localStorage.setItem(saveKey(), JSON.stringify({
-      collection: collection, score: score, caught: caught
-    }));
-  } catch(e){}
+  PM.progress.save(gradeForLevel(LEVEL), {
+    collection: collection, score: score, caught: caught
+  });
 }
 function loadGame(level){
-  var s = null;
-  try {
-    s = JSON.parse(localStorage.getItem("pokemath_l" + level));
-  } catch(e){ s = null; }
+  var s = PM.progress.load(gradeForLevel(level));
   if (s && s.collection){
     collection = s.collection;
     score = s.score || 0;

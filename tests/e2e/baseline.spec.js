@@ -108,8 +108,8 @@ test.describe('persistence', () => {
     await expect(page.locator('#overlay')).toHaveClass(/active/);
     await page.getByRole('button', { name: 'Далі!' }).click();
 
-    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('pokemath_l5')));
-    expect(saved, 'pokemath_l5 is written').not.toBeNull();
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('pokemath_profile_g0')));
+    expect(saved, 'pokemath_profile_g0 is written').not.toBeNull();
     expect(saved.caught).toBeGreaterThan(0);
     expect(Object.keys(saved.collection).length).toBeGreaterThan(0);
 
