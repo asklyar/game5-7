@@ -1,5 +1,5 @@
 /* ============ QUESTION GENERATION ============ */
-function rnd(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
+function rnd(a,b){ return PM.rndInt(a, b); }
 
 function newQuestion(){
   var keypad = document.getElementById("keypad");
@@ -32,7 +32,7 @@ function renderMathQuestion(){
   var a, b, op, correct, text;
   if (LEVEL === 5){
     // addition & subtraction to 20, result in 0..20
-    if (Math.random() < 0.5){
+    if (PM.rnd() < 0.5){
       a = rnd(0, 20); b = rnd(0, 20 - a);
       op = "+"; correct = a + b;
     } else {
