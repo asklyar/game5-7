@@ -30,7 +30,30 @@ window.PM = window.PM || {};
       "game.praise": "Молодець! ✅",
       "game.retry": "Спробуй ще! ❌",
       "game.pickAnswer": "Обери відповідь!",
-      "game.answerPlaceholder": "?"
+      "game.answerPlaceholder": "?",
+      "catalog.title": "📖 Мій каталог",
+      "catalog.stats": "Колекція",
+      "catalog.unknown": "???",
+      "catalog.notCaught": "Ще не знайдено",
+      "catalog.next": "→ {name} далі",
+      "catalog.strongest": "Найсильніша форма!",
+      "catalog.chainToggle": "▶ Еволюції",
+      "catalog.summary": "Знайдено покемонів: {caught} з {total}  |  Усього зірок: {stars}/{max}",
+
+      "modal.next": "Далі!",
+      "modal.newPokemon": "Новий покемон у колекції!",
+      "modal.evolution": "⭐ Еволюція! {from} → {to}",
+      "modal.completeTitle": "Ура!",
+      "modal.complete": "Колекцію завершено!",
+      "modal.completeNote": "Усі покемони досягли найсильнішої форми!",
+
+      "settings.title": "⚙️ Налаштування",
+      "settings.done": "Готово",
+      "settings.sound": "🔊 Звук",
+      "settings.voice": "🗣️ Голос",
+      "settings.animations": "✨ Анімації",
+      "settings.aria": "Налаштування",
+      "settings.gameAria": "Налаштування"
     }
   };
 
@@ -48,6 +71,9 @@ window.PM = window.PM || {};
   P.applyStrings = function(root){
     var scope = root || (typeof document !== "undefined" ? document : null);
     if (!scope || !scope.querySelectorAll) return;
+    if (typeof document !== "undefined" && (!root || root === document)) {
+      document.title = P.t("app.title");
+    }
     var nodes = scope.querySelectorAll("[data-i18n], [data-i18n-html]");
     for (var i = 0; i < nodes.length; i++){
       var el = nodes[i];

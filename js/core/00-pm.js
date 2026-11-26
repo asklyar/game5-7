@@ -80,12 +80,12 @@ var PM = window.PM = window.PM || {};
     modal.className = "modal";
     modal.setAttribute("role", "dialog");
     modal.setAttribute("aria-modal", "true");
-    modal.setAttribute("aria-label", "Налаштування");
+    modal.setAttribute("aria-label", P.t("settings.aria"));
 
     var body = document.createElement("div");
     body.className = "modal-body";
     var title = document.createElement("h2");
-    title.textContent = "⚙️ Налаштування";
+    title.textContent = P.t("settings.title");
     body.appendChild(title);
 
     listEl = document.createElement("div");
@@ -97,7 +97,7 @@ var PM = window.PM = window.PM || {};
     actions.className = "row modal-actions";
     var done = document.createElement("button");
     done.className = "btn green";
-    done.textContent = "Готово";
+    done.textContent = P.t("settings.done");
     done.onclick = closeSettings;
     actions.appendChild(done);
     modal.appendChild(actions);
@@ -163,7 +163,7 @@ var PM = window.PM = window.PM || {};
       var b = document.createElement("button");
       b.id = "pmSettingsBtnMenu";
       b.className = "theme-toggle";
-      b.textContent = "⚙️ Налаштування";
+      b.textContent = P.t("settings.title");
       b.onclick = openSettings;
       menuRow.appendChild(b);
     }
@@ -173,7 +173,7 @@ var PM = window.PM = window.PM || {};
       g.id = "pmSettingsBtnGame";
       g.className = "theme-toggle small";
       g.textContent = "📝";
-      g.setAttribute("aria-label", "Налаштування / Screenshot settings");
+      g.setAttribute("aria-label", P.t("settings.gameAria"));
       g.onclick = openSettings;
       var themeBtn = document.getElementById("gameThemeBtn");
       if (themeBtn && themeBtn.parentNode === topbar) topbar.insertBefore(g, themeBtn);
@@ -183,9 +183,9 @@ var PM = window.PM = window.PM || {};
 
   function initSettingsUI(){
     if (!P.settings || typeof P.settings.registerToggle !== "function") return;
-    P.settings.registerToggle({ key: "sound", label: "🔊 Звук", "default": true });
-    P.settings.registerToggle({ key: "voice", label: "🗣️ Голос", "default": true });
-    P.settings.registerToggle({ key: "animations", label: "✨ Анімації", "default": true });
+    P.settings.registerToggle({ key: "sound", label: P.t("settings.sound"), "default": true });
+    P.settings.registerToggle({ key: "voice", label: P.t("settings.voice"), "default": true });
+    P.settings.registerToggle({ key: "animations", label: P.t("settings.animations"), "default": true });
     addGear();
     renderSettings();
   }

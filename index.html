@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Математичні Покемони</title>
+<title data-i18n="app.title">Pokemon Math</title>
 <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
@@ -11,56 +11,56 @@
 
   <!-- ===== MENU ===== -->
   <section id="menu" class="screen active">
-    <h1 data-i18n="app.title">⚡ Математичні Покемони ⚡</h1>
-    <p class="center muted" data-i18n="app.description">Вирішуй приклади, вчи англійську та збирай колекцію покемонів!</p>
+    <h1 data-i18n="app.title"></h1>
+    <p class="center muted" data-i18n="app.description"></p>
     <div class="menu-columns">
       <div class="menu-col">
-        <h2 class="col-title" data-i18n="menu.grade0">🌱 5 років · 0 клас</h2>
+        <h2 class="col-title" data-i18n="menu.grade0"></h2>
         <div class="level-card">
-          <h2 data-i18n="menu.math">➕ Математика</h2>
-          <div class="desc" data-i18n-html="menu.math0.desc">Додавання і віднімання<br>до числа 20</div>
-          <button class="btn green" data-testid="start-math-5" data-action="start" data-arg="5,math" data-i18n="menu.play">Грати</button>
+          <h2 data-i18n="menu.math"></h2>
+          <div class="desc" data-i18n-html="menu.math0.desc"><br></div>
+          <button class="btn green" data-testid="start-math-5" data-action="start" data-arg="5,math" data-i18n="menu.play"></button>
         </div>
         <div class="level-card">
           <h2 data-i18n="menu.eng">🔤 English</h2>
-          <div class="desc" data-i18n-html="menu.eng0.desc">Тварини, кольори та числа<br>англійською</div>
-          <button class="btn green" data-testid="start-en-5" data-action="start" data-arg="5,en" data-i18n="menu.play">Грати</button>
+          <div class="desc" data-i18n-html="menu.eng0.desc"><br></div>
+          <button class="btn green" data-testid="start-en-5" data-action="start" data-arg="5,en" data-i18n="menu.play"></button>
         </div>
       </div>
       <div class="menu-col">
-        <h2 class="col-title" data-i18n="menu.grade2">🚀 7 років · 2 клас</h2>
+        <h2 class="col-title" data-i18n="menu.grade2"></h2>
         <div class="level-card">
-          <h2 data-i18n="menu.math">➕ Математика</h2>
-          <div class="desc" data-i18n-html="menu.math2.desc">Додавання і віднімання до 60<br>та множення до 10</div>
-          <button class="btn blue" data-testid="start-math-7" data-action="start" data-arg="7,math" data-i18n="menu.play">Грати</button>
+          <h2 data-i18n="menu.math"></h2>
+          <div class="desc" data-i18n-html="menu.math2.desc"><br></div>
+          <button class="btn blue" data-testid="start-math-7" data-action="start" data-arg="7,math" data-i18n="menu.play"></button>
         </div>
         <div class="level-card">
           <h2 data-i18n="menu.eng">🔤 English</h2>
-          <div class="desc" data-i18n-html="menu.eng2.desc">Їжа, часи, дії та тварини<br>англійською</div>
-          <button class="btn blue" data-testid="start-en-7" data-action="start" data-arg="7,en" data-i18n="menu.play">Грати</button>
+          <div class="desc" data-i18n-html="menu.eng2.desc"><br></div>
+          <button class="btn blue" data-testid="start-en-7" data-action="start" data-arg="7,en" data-i18n="menu.play"></button>
         </div>
       </div>
     </div>
     <div class="row">
-      <button class="btn" data-action="open-catalog" data-i18n="menu.catalog">📖 Каталог</button>
+      <button class="btn" data-action="open-catalog" data-i18n="menu.catalog"></button>
     </div>
     <div class="menu-theme-row">
-      <button class="theme-toggle" id="menuThemeBtn" data-action="toggle-theme" data-i18n="theme.night">🌙 Нічний режим</button>
+      <button class="theme-toggle" id="menuThemeBtn" data-action="toggle-theme" data-i18n="theme.night"></button>
     </div>
   </section>
 
   <!-- ===== GAME ===== -->
   <section id="game" class="screen">
     <div class="topbar">
-      <span class="stats" id="levelLabel">Рівень 5</span>
-      <span class="stats"><span data-i18n="game.score">Стикування:</span> <b id="score">0</b></span>
-      <span class="stats"><span data-i18n="game.caught">Знайдено:</span> <b id="caughtCount">0</b></span>
+      <span class="stats" id="levelLabel"></span>
+      <span class="stats"><span data-i18n="game.score"></span> <b id="score">0</b></span>
+      <span class="stats"><span data-i18n="game.caught"></span> <b id="caughtCount">0</b></span>
       <button class="theme-toggle small" id="gameThemeBtn" data-action="toggle-theme">🌙</button>
-      <button class="btn small red" data-action="go-menu" data-i18n="game.menu">🏠 Меню</button>
+      <button class="btn small red" data-action="go-menu" data-i18n="game.menu"></button>
     </div>
 
     <div class="question-box">
-      <div class="question-label" data-i18n="game.question.math">Обери правильну відповідь!</div>
+      <div class="question-label" data-i18n="game.question.math"></div>
       <div class="question" id="question">2 + 3 = ?</div>
       <div class="answer-area empty" id="answerArea">?</div>
       <div class="feedback" id="feedback"></div>
@@ -90,13 +90,13 @@
   <!-- ===== CATALOG ===== -->
   <section id="catalog" class="screen">
     <div class="catalog-head">
-      <h2 style="margin:0;font-size:30px;">📖 Мій каталог</h2>
+      <h2 style="margin:0;font-size:30px;" data-i18n="catalog.title"></h2>
       <div style="display:flex;gap:10px;align-items:center;">
         <button class="theme-toggle small" id="catalogThemeBtn" data-action="toggle-theme">🌙</button>
-        <button class="btn small" data-action="go-menu" data-i18n="game.menu">🏠 Меню</button>
+        <button class="btn small" data-action="go-menu" data-i18n="game.menu"></button>
       </div>
     </div>
-    <p class="center muted" id="catalogStats">Колекція</p>
+    <p class="center muted" id="catalogStats" data-i18n="catalog.stats"></p>
     <div class="catalog-grid" id="catalogGrid"></div>
   </section>
 
@@ -106,14 +106,14 @@
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="poke-emoji" id="modalEmoji" style="font-size:90px;">🦖</div>
-    <img id="modalImg" src="" alt="покемон" style="display:block;width:220px;height:220px;margin:0 auto;object-fit:contain;image-rendering:pixelated;">
-    <div class="poke-name" id="modalName">Пікачу</div>
+    <img id="modalImg" src="" alt="" style="display:block;width:220px;height:220px;margin:0 auto;object-fit:contain;image-rendering:pixelated;">
+    <div class="poke-name" id="modalName"></div>
     <div class="stars" id="modalStars">★★★</div>
     <div class="ability-note" id="modalAbility"></div>
     <div class="evo-note" id="modalEvo"></div>
     <div class="row">
-      <button class="btn green" data-action="close-modal">Далі!</button>
-      <button class="btn" data-action="close-modal-catalog">📖 Каталог</button>
+      <button class="btn green" data-action="close-modal" data-i18n="modal.next"></button>
+      <button class="btn" data-action="close-modal-catalog" data-i18n="menu.catalog"></button>
     </div>
   </div>
 </div>

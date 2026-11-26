@@ -21,16 +21,16 @@ function buildCatalog(){
 
     var nameLine, evoLine;
     if (cur === -1){
-      nameLine = "???" ;
-      evoLine  = "Ще не знайдено";
+      nameLine = PM.t("catalog.unknown");
+      evoLine  = PM.t("catalog.notCaught");
       caughtCount += 0;
     } else {
       nameLine = pp.stages[cur].name;
       caughtCount++;
       if (cur < pp.stages.length - 1){
-        evoLine = "→ " + pp.stages[cur + 1].name + " далі";
+        evoLine = PM.t("catalog.next", { name: pp.stages[cur + 1].name });
       } else {
-        evoLine = "Найсильніша форма!";
+        evoLine = PM.t("catalog.strongest");
       }
     }
 
@@ -77,13 +77,15 @@ function buildCatalog(){
       '<div class="pstars">' + starsStr(caughtStarsVal) + '</div>' +
       '<div class="ability">' + abilityText + '</div>' +
       '<div class="pevo">' + evoLine + '</div>' +
-      '<div class="chain-toggle" data-action="toggle-chain">▶ Еволюції</div>' +
+      '<div class="chain-toggle" data-action="toggle-chain">' + PM.t("catalog.chainToggle") + '</div>' +
       '<div class="evo-expand">' + chainHtml + '</div>';
     grid.appendChild(card);
   }
   document.getElementById("catalogStats").textContent =
-    "Знайдено покемонів: " + caughtCount + " з " + POKEMON.length +
-    "  |  Усього зірок: " + caughtStars + "/" + maxStars(POKEMON);
+    PM.t("catalog.summary", {
+      caught: caughtCount, total: POKEMON.length,
+      stars: caughtStars, max: maxStars(POKEMON)
+    });
 }
 function maxStars(list){
   var m = 0;

@@ -242,10 +242,10 @@ function catchPokemon(){
 
   var evoEl = document.getElementById("modalEvo");
   if (cur === -1){
-    evoEl.textContent = "Новий покемон у колекції!";
+    evoEl.textContent = PM.t("modal.newPokemon");
     evoEl.style.color = "#2e8b2e";
   } else {
-    evoEl.textContent = "⭐ Еволюція! " + stageOf(p,cur).name + " → " + st.name;
+    evoEl.textContent = PM.t("modal.evolution", { from: stageOf(p, cur).name, to: st.name });
     evoEl.style.color = "#c0392b";
   }
   document.getElementById("overlay").classList.add("active");
@@ -259,11 +259,11 @@ function showCollectionComplete(){
   var emo = document.getElementById("modalEmoji");
   emo.style.display = "block";
   emo.textContent = "🏆";
-  document.getElementById("modalName").textContent = "Ура!";
-  document.getElementById("modalStars").textContent = "Колекцію завершено!";
+  document.getElementById("modalName").textContent = PM.t("modal.completeTitle");
+  document.getElementById("modalStars").textContent = PM.t("modal.complete");
   document.getElementById("modalAbility").textContent = "";
   var evoEl = document.getElementById("modalEvo");
-  evoEl.textContent = "Усі покемони досягли найсильнішої форми!";
+  evoEl.textContent = PM.t("modal.completeNote");
   evoEl.style.color = "#2e8b2e";
   document.getElementById("overlay").classList.add("active");
 }
