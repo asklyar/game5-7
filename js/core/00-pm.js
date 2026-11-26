@@ -6,22 +6,6 @@ var PM = window.PM = window.PM || {};
 (function(){
   var P = window.PM;
 
-  /* ========== PM-18: iOS Adaptive UI Initialization ========== */
-  function initPM18Adapt() {
-    // Initialize safe area handling if param exists
-    var params = new URLSearchParams(location.search);
-    var safeArea = parseInt(params.get('safe') || '0,0,0,0');
-
-    if (safeArea && !window.pokemathSafeHandled) {
-      pokemathSafeArea = safeArea;
-      window.pokemathSafeHandled = true;
-
-      // Update CSS variables for top bar position
-      document.documentElement.style.setProperty('--safe-area-top', safeArea + 'px');
-      document.body.classList.add('home-screen-app');
-    }
-  }
-
   /* ========== Event bus (PM-00 R3) ========== */
   if (!P.on) {
     var handlers = {};
@@ -125,12 +109,6 @@ var PM = window.PM = window.PM || {};
       "default": true
     });
 
-    // Register iOS screenshot setting (PM-18)
-    P.settings.registerToggle({
-      key: "ios-screenshot-enabled",
-      label: "📱 Сніmare екрану (iOS)",
-      "default": false
-    });
   }
 
   /* ---------- Minimal Settings UI ========== */
@@ -248,132 +226,5 @@ var PM = window.PM = window.PM || {};
 
   if (document.body) addGear();
   else document.addEventListener("DOMContentLoaded", addGear);
-
-  /* ========== PM-18: Safe Area Support Handlers ========== */
-  var pokemathSafeArea = null;
-
-  function applySafeAreaAdjustments() {
-    if (!document.getElementById('gameTopbar')) return;
-
-    var topbar = document.getElementById('gameTopbar');
-    var safe = typeof pokemathSafeArea === 'object' ? pokemathSafeArea : null;
-
-    if (safe && safe.top) {
-      // Set CSS custom properties for safe area
-      document.documentElement.style.setProperty('--safe-area-top', safe.top + 'px');
-      document.body.classList.add('safe-area-applied');
-
-      // Adjust topbar margin to accommodate iOS safe area
-      var gap = parseFloat(getComputedStyle(topbar).gap) || 8;
-      var marginTopAdjustment = (safe.top / 2) + 10;
-      topbar.style.marginTop = '-(' + (marginTopAdjustment > 0 ? marginTopAdjustment : 0) + ')px';
-      topbar.style.paddingTop = 'max(' + gap / 2 + ', ' + (marginTopAdjustment / 2) + ')px';
-
-      // Prevent overflow in safe areas
-      if (safe.left || safe.right) {
-        document.body.style.overflow = 'auto';
-      } else {
-        document.body.style.overflow = 'hidden';
-      }
-    }
-  }
-
-  /* Handle Home Screen app params */
-  if (typeof pokemathSafeArea === 'string' && pokemathSafeArea.length) {
-    // Parse the safe area parameter (format: "top,left,bottom,right")
-    var parts = pokemathSafeArea.split(',');
-    pokemathSafeArea = {
-      top: parseInt(parts[0] || '0'),
-      left: parseInt(parts[1] || '0'),
-      bottom: parseInt(parts[2] || '0'),
-      right: parseInt(parts[3] || '0')
-    };
-    
-    // Update CSS variables for all safe areas
-    document.documentElement.style.setProperty('--safe-area-top', pokemathSafeArea.top + 'px');
-    document.documentElement.style.setProperty('--safe-area-left', pokemathSafeArea.left + 'px');
-    document.documentElement.style.setProperty('--safe-area-right', pokemathSafeArea.right + 'px');
-
-    // Apply adjustments
-    applySafeAreaAdjustments();
-    document.body.classList.add('home-screen-app');
-  } else {
-    document.body.classList.add('home-screen-app');
-  }
-
-  /* ========== PM-18: Touch Prevention Settings ========== */
-  function applyTouchSettings() {
-    // User-select prevention (AC7)
-    if (window.userSelectPrevented !== true) {
-      document.documentElement.style.webkitUserSelect = 'none';
-      document.documentElement.style.userSelect = 'none';
-      
-      // Prevent default tap highlights
-      var touchables = document.querySelectorAll('button, input, select');
-      touchables.forEach(function(el) {
-        el.addEventListener('touchstart', function(e) {
-          if (e.target.tagName !== 'BUTTON' && 
-              e.target.tagName !== 'INPUT' && 
-              e.target.tagName !== 'SELECT') {
-            e.preventDefault();
-          }
-        }, { capture: true });
-      });
-
-      // Prevent zoom on double tap
-      var elements = document.querySelectorAll('*');
-      elements.forEach(function(el) {
-        el.addEventListener('dblclick', function(e) {
-          if (e.target.tagName !== 'IMG' && 
-              !el.getAttribute('data-prevent-zoom')) {
-            e.preventDefault();
-            return false;
-          }
-        });
-      });
-
-      window.userSelectPrevented = true;
-    }
-  }
-
-  /* ========== PM-18: Responsive Layout Detection ========== */
-  function detectResponsiveLayout() {
-    var vh = window.innerHeight || document.documentElement.clientHeight;
-    var vw = window.innerWidth || document.documentElement.clientWidth;
-
-    // Return layout configuration based on viewport size
-    if (vh < 320) {
-      return { type: 'small', columns: 1 };
-    } else if (vh >= 320 && vh < 430) {
-      return { type: 'medium', columns: 2 };
-    } else {
-      return { type: 'large', columns: 4 };
-    }
-  }
-
-  /* Apply responsive layout based on viewport */
-  function applyResponsiveLayout() {
-    var layout = detectResponsiveLayout();
-    document.body.style.responsiveLayout = JSON.stringify(layout);
-
-    // Update game container if exists
-    var gameContainer = document.querySelector('.game-container');
-    var keypad = document.querySelector('.keypad');
-
-    if (layout.columns === 2 && gameContainer) {
-      gameContainer.classList.add('two-column-layout');
-    }
-  }
-
-  /* Initialize on DOM ready */
-  if (document.body) {
-    applyResponsiveLayout();
-    applyTouchSettings();
-  } else {
-    document.addEventListener("DOMContentLoaded", function() {
-      applyResponsiveLayout();
-      applyTouchSettings();
-    });
-  }
 
 })();
