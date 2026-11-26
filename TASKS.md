@@ -8,46 +8,13 @@ Owner: Andrew. Written 2026-11-26. Based on a review of the repo (index.html, sr
 ## Decisions log (agent runs — read first)
 Append-only. Each entry records what was actually done vs. the plan, so a fresh agent can pick up. Newest at the bottom.
 
-### T01 · Repo hygiene & README — DONE 2026-11-26 (commit 22b4d39, pushed, deployed)
-Context: the user had already deleted many non-game files from the working tree *before* this run; per "keep as is", those deletions were honored rather than reversed.
-- **6 items T01 listed for `git mv` into `_archive/` were already deleted by the user → kept deleted** (recoverable from git history, not restored): `kanban/`, `create_kanban_tasks.py`, `fix_kanban_tasks.py`, `simple_kanban_generator.py`, `pokemath-requirements.md`, `STATUS.md`.
-- **`.claude/` and `.obsidian/` still existed → moved to `_archive/`** (now `_archive/.claude/`, `_archive/.obsidian/`).
-- **`autotest.py` was already moved by the user to `tests/autotest.py` → honored as a rename**; it is NOT back at the repo root.
-- **`TASKS.md` (this file) is intentionally left untracked** (not committed, not moved) — a future agent editing it can re-decide, but as of T01 it stays out of the repo on purpose.
-- **`.gitignore` now ignores** `.DS_Store`, `node_modules/`, `test-results/`, `.obsidian/`. `.DS_Store` was `git rm --cached`.
-- **Wrinkle resolved:** `.obsidian/` in `.gitignore` blocked a normal `git add` of the tracked archive copy, so `_archive/.obsidian/*` was force-added (`git add -f`) to keep the archive complete; `.gitignore` only guards *future* Obsidian state.
-- **Committed** as `T01: Repo hygiene & README` and **pushed to `origin/main`** (`asklyar/game5-7`).
-- **GitHub Pages:** repo is **public**; Pages was enabled via `gh api` (source = `main` / root). Build status `built`, live at `https://asklyar.github.io/game5-7/` (HTTP 200; serves the game `<title>` and `src/js/00-pm.js` 200).
-- **Deviations from T01's literal "Done when"** (all caused by the user's "keep as is" choices): `autotest.py` lives in `tests/`, not root; `TASKS.md` is untracked; `.DS_Store` stays on disk but is gitignored.
-- **NOT verified by the agent:** a real in-browser render / play-through of the game (substituted an HTTP 200 + title check instead).
-- Root now holds: `index.html`, `src/`, `tests/`, `_archive/`, `README.md`, `.gitignore` (+ untracked `TASKS.md`, on-disk `.DS_Store`).
-### T02 - T14 - DONE  2026-11-26, withot records in this file
-
-### T15 · Skill registry + question runner — DONE 2026-11-26
-- **Created** `js/skills/registry.js`: `PM.skills.register/get/list(filter)/next(ids, ctx)/validate(item)`.
-  - `register` rejects a duplicate id (and a non-function `generate`, bad `subject`/`grade`); defaults `tiers` to 1.
-  - `validate` checks the §1 contract: non-empty `key` string, `prompt.text` non-empty string, `input` ∈ {keypad,choice,tiles}, non-null `answer`, and for `choice` a non-empty array of unique-labelled `{label, emoji?}` options that includes the answer.
-  - `next` picks a skill with the seeded `PM.rnd()` (falls back to a caller-supplied `ctx.rnd`), calls `generate(ctx)`, then `validate`s and returns the item; unknown ids throw.
-- **Created** `tests/unit/registry.test.js` (7 tests, node --test via `vm`): register/get/list, duplicate-id rejected, invalid item rejected, `next` deterministic per seed (and differing across seeds), unknown id rejected, contract violation throws. All pass.
-- **Deviation from T15's literal "Files" (which listed only the two new files):** also added one `<script src="js/skills/registry.js">` line to `index.html` (after `js/core/strings.js`, before the features), matching the T12/T13 precedent so the module actually loads. It is inert at load time (only defines `PM.skills`; no DOM, no `generate` call), so the e2e baseline stays green.
-- **Verified:** `npm test` green — 32 unit + 6 e2e. `registry.js` served 200; smoke test reports no console errors.
-- **NOT verified by the agent:** no in-browser play-through (registry is not yet wired into `js/game.js`; that is T16).
-
-### T16 · Migrate Math (grade 0) to a skill — DONE 2026-11-26
-- **Created** `js/skills/math-add20.js`: registers `math.add20` skill (grade 0 math, 0..20 add/sub within 0..20, non-negative, normalised commutative keys for addition).
-- **Created** `tests/unit/skill-math-add20.test.js` (4 tests): registration verification, 500 seeded questions checking range, contract validity, arithmetic correctness, non-negative results; normalised addition key validation; seed determinism.
-- **Updated** `js/ui/game.js`: `renderMathQuestion` queries `PM.skills.next('math.add20', { tier: 0 })` when `LEVEL === 5` instead of inline generation.
-- **Updated** `index.html`: added `<script src="js/skills/math-add20.js"></script>`.
-- **Verified:** `npm test` green — 36 unit + 6 e2e passing.
-
-### T17 · Migrate Math (grade 2) to skills — DONE 2026-11-26
-- **Created** `js/skills/math-addsub60.js`: registers `math.addsub60` skill (grade 2 math, 0..60 add/sub within 0..60, non-negative, normalised commutative keys for addition).
-- **Created** `js/skills/math-times10.js`: registers `math.times10` skill (grade 2 math, 1..10 multiplication table, normalised commutative keys for multiplication).
-- **Created** `tests/unit/skill-math-addsub60.test.js` (4 tests): registration, 500 seeded questions range and contract validation, normalised keys, seed determinism.
-- **Created** `tests/unit/skill-math-times10.test.js` (4 tests): registration, 500 seeded questions range and contract validation, normalised keys, seed determinism.
-- **Updated** `js/ui/game.js`: `renderMathQuestion` queries `PM.skills.next(['math.addsub60', 'math.addsub60', 'math.times10'], { tier: 0 })` for grade 2 (preserving 1/3 add, 1/3 sub, 1/3 multiplication probability).
-- **Updated** `index.html`: added script tags for `math-addsub60.js` and `math-times10.js`.
-- **Verified:** `npm test` green — 44 unit + 6 e2e passing.
+### Dev Status
+## T01 · Repo hygiene & README — DONE 2026-11-26 
+## T02 - T14 - DONE  2026-11-26
+## T15 · Skill registry + question runner — DONE 2026-11-26
+## T16 · Migrate Math (grade 0) to a skill — DONE 2026-11-26
+## T17 · Migrate Math (grade 2) to skills — DONE 2026-11-26
+## T18 · Migrate English to a skill  -  — DONE 2026-11-26
 
 ### T18 · Migrate English to a skill — DONE 2026-11-26
 - **Created** `js/skills/eng-vocab.js`: registers `eng.vocab.g0` and `eng.vocab.g2` skills using `PM.data.words` (input `choice`, 4 unique options, distractors prioritize same topic when `topic` is set, prompt `uk`, options `en` uppercase for single words).
