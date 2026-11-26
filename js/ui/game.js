@@ -32,24 +32,17 @@ function renderMathQuestion(){
   var text, correct;
   if (LEVEL === 5){
     // grade 0: ask the skill registry instead of computing the question
-    // inline (T16). Level 7 stays inline until T17 turns it into skills too.
+    // inline (T16).
     var item = PM.skills.next('math.add20', { tier: 0 });
     text = item.prompt.text;
     correct = item.answer;
   } else {
-    // level 7: +/− up to 60, and multiplication up to 10
-    var a, b, op, kind = rnd(0, 2);
-    if (kind === 0){            // addition up to 60
-      a = rnd(0, 60); b = rnd(0, 60 - a);
-      op = "+"; correct = a + b;
-    } else if (kind === 1){     // subtraction up to 60
-      a = rnd(0, 60); b = rnd(0, a);
-      op = "−"; correct = a - b;
-    } else {                    // multiplication table up to 10
-      a = rnd(1, 10); b = rnd(1, 10);
-      op = "×"; correct = a * b;
-    }
-    text = a + " " + op + " " + b + " = ?";
+    // grade 2 (T17): ask the skill registry for math.addsub60 and math.times10.
+    // passing ['math.addsub60', 'math.addsub60', 'math.times10'] preserves
+    // the 1/3 add, 1/3 sub, 1/3 multiplication distribution.
+    var item = PM.skills.next(['math.addsub60', 'math.addsub60', 'math.times10'], { tier: 0 });
+    text = item.prompt.text;
+    correct = item.answer;
   }
   question = { text: text, correct: correct };
   if (PM.noRepeat.check(question, 'math')) {

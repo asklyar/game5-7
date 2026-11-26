@@ -40,6 +40,15 @@ Context: the user had already deleted many non-game files from the working tree 
 - **Updated** `index.html`: added `<script src="js/skills/math-add20.js"></script>`.
 - **Verified:** `npm test` green — 36 unit + 6 e2e passing.
 
+### T17 · Migrate Math (grade 2) to skills — DONE 2026-11-26
+- **Created** `js/skills/math-addsub60.js`: registers `math.addsub60` skill (grade 2 math, 0..60 add/sub within 0..60, non-negative, normalised commutative keys for addition).
+- **Created** `js/skills/math-times10.js`: registers `math.times10` skill (grade 2 math, 1..10 multiplication table, normalised commutative keys for multiplication).
+- **Created** `tests/unit/skill-math-addsub60.test.js` (4 tests): registration, 500 seeded questions range and contract validation, normalised keys, seed determinism.
+- **Created** `tests/unit/skill-math-times10.test.js` (4 tests): registration, 500 seeded questions range and contract validation, normalised keys, seed determinism.
+- **Updated** `js/ui/game.js`: `renderMathQuestion` queries `PM.skills.next(['math.addsub60', 'math.addsub60', 'math.times10'], { tier: 0 })` for grade 2 (preserving 1/3 add, 1/3 sub, 1/3 multiplication probability).
+- **Updated** `index.html`: added script tags for `math-addsub60.js` and `math-times10.js`.
+- **Verified:** `npm test` green — 44 unit + 6 e2e passing.
+
 ## 0. Executive summary (read first)
 
 **Facts found in the repo**
@@ -263,7 +272,7 @@ Same as T13 for the remaining screens. **Done when:** `grep -nP "[А-Яа-яІі
 **Steps:** Reproduce the current level-5 behaviour (+/- inside 0..20, never negative) as skill `math.add20`; `key` = normalised (`a+b` and `b+a` same key); game asks the registry instead of `renderMathQuestion`.
 **Done when:** unit test runs 500 seeded questions: answer within 0..20, correct arithmetic, no negatives. Baseline e2e green.
 
-### T17 · Migrate Math (grade 2) to skills `[P0 · M · deps T15]`
+### T17 · Migrate Math (grade 2) to skills `[P0 · M · deps T15]` - Done 2026-11-26
 Skills `math.addsub60` (tier-less, current behaviour) and `math.times10` (table 1..10). Same tests/rules as T16.
 
 ### T18 · Migrate English to a skill `[P0 · M · deps T15, T06]`
