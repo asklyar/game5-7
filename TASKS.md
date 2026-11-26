@@ -49,6 +49,13 @@ Context: the user had already deleted many non-game files from the working tree 
 - **Updated** `index.html`: added script tags for `math-addsub60.js` and `math-times10.js`.
 - **Verified:** `npm test` green — 44 unit + 6 e2e passing.
 
+### T18 · Migrate English to a skill — DONE 2026-11-26
+- **Created** `js/skills/eng-vocab.js`: registers `eng.vocab.g0` and `eng.vocab.g2` skills using `PM.data.words` (input `choice`, 4 unique options, distractors prioritize same topic when `topic` is set, prompt `uk`, options `en` uppercase for single words).
+- **Created** `tests/unit/skill-eng-vocab.test.js` (5 tests): registration check, 500 seeded questions for grade 0, 500 seeded questions for grade 2 (unique options, length 4, includes answer), same-topic distractor priority test, and seed determinism test.
+- **Updated** `js/ui/game.js`: `newEnglishQuestion` queries `PM.skills.next(skillId, { tier: 0 })` (`eng.vocab.g0` for level 5, `eng.vocab.g2` for level 7) instead of inline generation.
+- **Updated** `index.html`: added `<script src="js/skills/eng-vocab.js"></script>`.
+- **Verified:** `npm test` green — 49 unit + 6 e2e passing.
+
 ## 0. Executive summary (read first)
 
 **Facts found in the repo**

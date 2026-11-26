@@ -59,35 +59,19 @@ function renderQuestion(){
 
 /* ============ ENGLISH QUESTION ============ */
 function newEnglishQuestion(){
-  var bank = (LEVEL === 5) ? EN_WORDS_5 : EN_WORDS_7;
-  var pair = bank[rnd(0, bank.length - 1)];
-  var uk = pair[0], en = pair[1];
+  var skillId = (LEVEL === 5) ? 'eng.vocab.g0' : 'eng.vocab.g2';
+  var item = PM.skills.next(skillId, { tier: 0 });
+  var options = item.options.map(function(o){ return o.label; });
 
-  // build options: the correct english + 3 random distractors
-  var others = [];
-  for (var i=0;i<bank.length;i++){
-    if (bank[i][1] !== en) others.push(bank[i][1]);
-  }
-  var options = [en];
-  while (options.length < 4 && others.length > 0){
-    var pick = others.splice(rnd(0, others.length - 1), 1)[0];
-    options.push(pick);
-  }
-  // shuffle options
-  for (var j=options.length-1; j>0; j--){
-    var k = rnd(0, j);
-    var t = options[j]; options[j] = options[k]; options[k] = t;
-  }
-
-  question = { uk: uk, en: en, options: options };
+  question = { uk: item.prompt.text, en: item.answer, options: options };
   if (PM.noRepeat.check(question, 'en')) {
-    document.getElementById("question").textContent = uk.toUpperCase();
+    document.getElementById("question").textContent = item.prompt.text;
     var box = document.getElementById("enOptions");
     box.innerHTML = "";
     for (var o=0;o<options.length;o++){
       var btn = document.createElement("button");
       btn.className = "en-option";
-      btn.textContent = options[o].toUpperCase();
+      btn.textContent = options[o];
       (function(opt){
         btn.onclick = function(){ checkEnglish(opt); };
       })(options[o]);
