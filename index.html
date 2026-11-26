@@ -638,7 +638,12 @@ function renderMathQuestion(){
   }
   text = a + " " + op + " " + b + " = ?";
   question = { text: text, correct: correct };
-  renderQuestion();
+  if (PM.noRepeat.check(question, 'math')) {
+    renderQuestion();
+    PM.noRepeat.record(question, 'math');
+  } else {
+    renderMathQuestion();
+  }
 }
 
 function renderQuestion(){
@@ -668,17 +673,22 @@ function newEnglishQuestion(){
   }
 
   question = { uk: uk, en: en, options: options };
-  document.getElementById("question").textContent = uk.toUpperCase();
-  var box = document.getElementById("enOptions");
-  box.innerHTML = "";
-  for (var o=0;o<options.length;o++){
-    var btn = document.createElement("button");
-    btn.className = "en-option";
-    btn.textContent = options[o].toUpperCase();
-    (function(opt){
-      btn.onclick = function(){ checkEnglish(opt); };
-    })(options[o]);
-    box.appendChild(btn);
+  if (PM.noRepeat.check(question, 'en')) {
+    document.getElementById("question").textContent = uk.toUpperCase();
+    var box = document.getElementById("enOptions");
+    box.innerHTML = "";
+    for (var o=0;o<options.length;o++){
+      var btn = document.createElement("button");
+      btn.className = "en-option";
+      btn.textContent = options[o].toUpperCase();
+      (function(opt){
+        btn.onclick = function(){ checkEnglish(opt); };
+      })(options[o]);
+      box.appendChild(btn);
+    }
+    PM.noRepeat.record(question, 'en');
+  } else {
+    newEnglishQuestion();
   }
 }
 
@@ -691,6 +701,7 @@ function checkEnglish(opt){
       buttons[i].onclick = null;
     }
     fb("Молодець! ✅", "good");
+    if (PM && PM.emit) PM.emit("answer:correct");
     score++;
     caught++;
     updateStats();
@@ -700,6 +711,7 @@ function checkEnglish(opt){
       if (buttons[k].textContent === opt.toUpperCase()) buttons[k].classList.add("wrong");
     }
     fb("Спробуй ще! ❌", "bad");
+    if (PM && PM.emit) PM.emit("answer:wrong");
   }
 }
 
@@ -734,12 +746,14 @@ function checkAnswer(){
   var fbEl = document.getElementById("feedback");
   if (val === question.correct){
     fb("Молодець! ✅", "good");
+    if (PM && PM.emit) PM.emit("answer:correct");
     score++;
     caught++;
     updateStats();
     catchPokemon();
   } else {
     fb("Спробуй ще! ❌", "bad");
+    if (PM && PM.emit) PM.emit("answer:wrong");
     // do not advance, let child retry
   }
 }
@@ -818,6 +832,7 @@ function catchPokemon(){
     evoEl.style.color = "#c0392b";
   }
   document.getElementById("overlay").classList.add("active");
+  if (PM && PM.emit) PM.emit("catch:done", { evolved: evolved });
   saveGame();
 }
 
@@ -951,6 +966,15 @@ document.addEventListener("keydown", function(e){
   else if (e.key === "Enter") checkAnswer();
   else if (e.key === "Escape") clearKey();
 });
+
 </script>
+
+<!-- Load PM-00 foundation (event bus, settings, storage) BEFORE features so
+     features share the same window.PM object and PM.on/PM.emit exist. -->
+<script src="src/js/00-pm.js"></script>
+<!-- Load sound feature -->
+<script src="src/js/features/no-repeat.js"></script>
+<script src="src/js/features/sound.js"></script>
+
 </body>
 </html>

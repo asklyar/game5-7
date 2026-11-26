@@ -4,14 +4,12 @@
 <meta charset="UTF-8">
 <!-- PM-18 R1: no maximum-scale / user-scalable=no; pinch zoom stays available. -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#8ed0ff" id="themeColorMeta">
+<!-- PM-18: safe area support for iPhone (Home Screen app) -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Покемати">
-<!-- PM-15 owns the icon files. Add the link only when the file exists:
+<!-- PM-15 owns the icon files. Add the link only when the file exists: -->
 <link rel="apple-touch-icon" sizes="180x180" href="icons/icon-180.png">
--->
 <title>Математичні Покемони</title>
 <script>
 /* PM-18 R1/R18: set the initial theme-color before first paint. Saved choice wins. */
@@ -29,6 +27,7 @@
 /*__CSS__*/
 </style>
 </head>
+
 <body>
 
 <div class="wrap">
@@ -70,6 +69,7 @@
     </div>
     <div class="menu-theme-row">
       <button class="theme-toggle" id="menuThemeBtn" onclick="toggleTheme()">🌙 Нічний режим</button>
+      <button class="theme-toggle small" id="pmSettingsBtnMenu" aria-label="Налаштування" onclick="openSettings()">⚙️ Налаштування</button>
     </div>
   </section>
 
@@ -103,7 +103,6 @@
       <button class="key" onclick="pressKey('2')">2</button>
       <button class="key" onclick="pressKey('3')">3</button>
       <button class="key check" onclick="checkAnswer()">✓</button>
-      <button class="key wide" style="grid-column: span 4;" onclick="pressKey('0')">0</button>
     </div>
 
     <div class="english-area" id="englishArea" style="display:none;">
@@ -123,8 +122,6 @@
     <p class="center muted" id="catalogStats">Колекція</p>
     <div class="catalog-grid" id="catalogGrid"></div>
   </section>
-
-</div>
 
 <!-- Catch overlay -->
 <div class="overlay" id="overlay">

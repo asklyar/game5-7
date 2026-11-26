@@ -1,0 +1,13 @@
+{"timestamp":"2026-11-24T21:50:43.801874+02:00","action":"create","task_id":1,"detail":"test-task"}
+{"timestamp":"2026-11-24T21:56:17.286017+02:00","action":"create","task_id":2,"detail":"new test"}
+{"timestamp":"2026-11-24T21:57:00.373354+02:00","action":"move","task_id":2,"detail":"backlog -\u003e todo"}
+{"timestamp":"2026-11-24T21:57:27.535684+02:00","action":"move","task_id":2,"detail":"todo -\u003e review"}
+{"timestamp":"2026-11-24T21:58:00.001936+02:00","action":"move","task_id":2,"detail":"review -\u003e in-progress"}
+{"timestamp":"2026-11-24T21:58:05.382996+02:00","action":"move","task_id":2,"detail":"in-progress -\u003e todo"}
+{"timestamp":"2026-11-24T21:58:11.49309+02:00","action":"move","task_id":2,"detail":"todo -\u003e backlog"}
+{"timestamp":"2026-11-24T21:58:16.126293+02:00","action":"move","task_id":1,"detail":"backlog -\u003e review"}
+{"timestamp":"2026-11-24T22:18:53.007326+02:00","action":"delete","task_id":2,"detail":"new test"}
+{"timestamp":"2026-11-24T22:18:56.879868+02:00","action":"delete","task_id":1,"detail":"test-task"}
+{"timestamp":"2026-11-24T23:00:20.761054+02:00","action":"move","task_id":5,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-11-25T00:16:25.309517+02:00","action":"move","task_id":3,"detail":"backlog -\u003e in-progress"}
+{"timestamp":"2026-11-25T00:16:34.959938+02:00","action":"move","task_id":5,"detail":"backlog -\u003e in-progress"}

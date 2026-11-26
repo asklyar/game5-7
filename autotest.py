@@ -17,6 +17,21 @@ TEST_JS = r"""
   function eq(a,b,msg){ ok(a===b, msg+" (got "+a+", want "+b+")"); }
 
   try {
+    // Install a mock AudioContext up front so the sound engine (PM-04) is
+    // observable. It funnels every oscillator it creates into a global counter
+    // that the PM-04 assertions reset and inspect.
+    window.__snd = [];
+    function FakeAudioContext(){
+      this.currentTime = 0; this.state = "running"; this.destination = {};
+      this.createOscillator = function(){
+        var o = { type:"", frequency:{value:0}, connect:function(){}, start:function(){}, stop:function(){}, disconnect:function(){}, onended:null };
+        window.__snd.push(o); return o;
+      };
+      this.createGain = function(){ return { gain:{value:0}, connect:function(){}, disconnect:function(){} }; };
+      this.resume = function(){};
+    }
+    window.AudioContext = window.webkitAudioContext = FakeAudioContext;
+
     // 1) Data integrity
     ok(Array.isArray(POKEMON), "POKEMON is array");
     eq(POKEMON.length, 98, "POKEMON family count");
@@ -134,6 +149,61 @@ TEST_JS = r"""
     loadGame(7);
     eq(score, 0, "level7 fresh score=0");
     eq(caught, 0, "level7 fresh caught=0");
+
+    // 8) English mode opens the English UI, NOT the math keypad
+    localStorage.removeItem("pokemath_l5");
+    startGame(5, "en");
+    ok(MODE === "en", "English startGame sets MODE=en");
+    ok(document.getElementById("englishArea").style.display === "block", "englishArea visible in English mode");
+    ok(document.getElementById("keypad").style.display === "none", "keypad hidden in English mode");
+    ok(document.getElementById("answerArea").style.display === "none", "answer box hidden in English mode");
+    var enButtons = document.getElementById("enOptions").querySelectorAll(".en-option");
+    eq(enButtons.length, 4, "English question shows 4 options");
+    ok(question && typeof question.en === "string", "English question has an English answer");
+    var caughtBefore = caught;
+    checkEnglish(question.en);
+    ok(document.getElementById("overlay").classList.contains("active"), "overlay opens after a correct English answer");
+    eq(caught, caughtBefore + 1, "caught increments after a correct English answer");
+
+    // 9) PM-04: the sound event bus actually reaches the sound engine.
+    //    A mock AudioContext was installed at the top of this block; every
+    //    oscillator the engine creates is funnelled into window.__snd, which we
+    //    reset before each assertion.
+    var setSound = function(v){ if (PM.settings && PM.settings.set) PM.settings.set("sound", v);
+      else if (PM.sound && PM.sound.enable) PM.sound.enable(v); };
+
+    // AC1: sound OFF => no oscillator is created
+    setSound(false);
+    window.__snd = [];
+    PM.emit("answer:correct");
+    PM.emit("catch:done", { evolved: true });
+    eq(window.__snd.length, 0, "AC1: sound off => no oscillator created");
+
+    // AC2: evolved => 'evolve' arpeggio (many oscillators), not a single 'catch'
+    setSound(true);
+    window.__snd = [];
+    PM.emit("catch:done", { evolved: true });
+    ok(window.__snd.length >= 4, "AC2: evolved plays arpeggio (>=4 oscillators), got " + window.__snd.length);
+    window.__snd = [];
+    PM.emit("catch:done", { evolved: false });
+    eq(window.__snd.length, 1, "non-evolved catch plays a single oscillator");
+    window.__snd = [];
+    PM.emit("answer:correct");
+    eq(window.__snd.length, 1, "answer:correct plays one oscillator");
+    window.__snd = [];
+    PM.emit("answer:wrong");
+    eq(window.__snd.length, 1, "answer:wrong plays one oscillator");
+
+    // AC3: no AudioContext => no exception thrown
+    var hadCtx = ("AudioContext" in window);
+    delete window.AudioContext; delete window.webkitAudioContext;
+    var threw = false;
+    try { PM.emit("answer:correct"); } catch(e){ threw = true; }
+    ok(!threw, "AC3: missing AudioContext does not throw");
+    if (hadCtx) window.AudioContext = window.webkitAudioContext = FakeAudioContext;
+
+    // leave sound ON for the real game
+    setSound(true);
   } catch(e){
     R.fail++; R.log.push("EXCEPTION: " + e.message + "\n" + e.stack);
   }
@@ -153,6 +223,11 @@ def main():
     testpath = os.path.join(tmpd, "test.html")
     with open(testpath, "w", encoding="utf-8") as f:
         f.write(injected)
+    # Ship the src/ tree next to test.html so the relative <script src="src/js/...">
+    # tags (PM-00 foundation, no-repeat, sound) actually resolve in headless Chrome.
+    src_root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "src")
+    if os.path.isdir(src_root):
+        shutil.copytree(src_root, os.path.join(tmpd, "src"))
     profile = os.path.join(tmpd, "profile")
     cmd = [
         CHROME, "--headless=new", "--no-sandbox",

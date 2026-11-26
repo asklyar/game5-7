@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "pokemath-requirements.md",
+                "file": "kanban/tasks/006-pm-05.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "pokemath-requirements"
+              "title": "006-pm-05"
             }
           }
         ]
@@ -83,8 +83,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "right": {
     "id": "616137df9f908b16",
@@ -100,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "pokemath-requirements.md",
+                "file": "kanban/tasks/006-pm-05.md",
                 "collapseAll": true,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -119,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "pokemath-requirements.md",
+                "file": "kanban/tasks/006-pm-05.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -162,7 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "pokemath-requirements.md",
+                "file": "kanban/tasks/006-pm-05.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -189,6 +188,43 @@
       "bases:Create new base": false
     }
   },
-  "active": "cd926aded8aacf85",
-  "lastOpenFiles": []
+  "active": "e1902b43eb6c3e07",
+  "lastOpenFiles": [
+    "tests/test_pm_02.py",
+    "src/js/features/no-repeat.js",
+    "kanban/tasks/020-pm-17c.md",
+    "kanban/tasks/019-pm-17b.md",
+    "kanban/tasks/018-pm-17a.md",
+    "kanban/tasks/021-pm-18.md",
+    "tests/test_sound_events.py",
+    "fix_kanban_tasks.py",
+    "tests/test_pm_04.py",
+    "src/js/features/sound.js",
+    "kanban/tasks/004-pm-03.md",
+    "kanban/tasks/003-pm-02.md",
+    "kanban/tasks/002-pm-01.md",
+    "kanban/tasks/001-pm-00.md",
+    "kanban/tasks/018-pm-18.md",
+    "kanban/tasks/017-pm-16.md",
+    "kanban/tasks/016-pm-15.md",
+    "kanban/tasks/015-pm-14.md",
+    "kanban/tasks/014-pm-13.md",
+    "kanban/tasks/013-pm-12.md",
+    "kanban/tasks/012-pm-11.md",
+    "kanban/tasks/011-pm-10.md",
+    "kanban/tasks/010-pm-09.md",
+    "kanban/tasks/009-pm-08.md",
+    "kanban/tasks/008-pm-07.md",
+    "kanban/tasks/007-pm-06.md",
+    "kanban/tasks/006-pm-05.md",
+    "kanban/tasks/005-pm-04.md",
+    "simple_kanban_generator.py",
+    "kanban/tasks/001-test-task.md",
+    "kanban/tasks/002-new-test.md",
+    "create_kanban_tasks_fixed.py",
+    "create_kanban_tasks.py",
+    "pokemath-requirements.md",
+    "kanban/activity.jsonl",
+    "kanban/tasks"
+  ]
 }

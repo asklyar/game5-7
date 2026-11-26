@@ -124,8 +124,15 @@ var EN_WORDS_5 = [
   ["білий","white"], ["чорний","black"],
   ["один","one"], ["два","two"], ["три","three"], ["чотири","four"],
   ["п'ять","five"], ["шість","six"], ["сім","seven"], ["вісім","eight"],
-  ["дев'ять","nine"], ["десять","ten"]
+  ["дев'ять","nine"], ["десять","ten"],
+  ["мама","mom"], ["тато","dad"], ["брат","brother"], ["сестра","sister"], ["дідусь","grandpa"], ["бабуся","grandma"],
+  ["очі","eyes"], ["носа","nose"], ["рот","mouth"], ["вуха","ears"], ["руки","hands"], ["ноги","legs"],
+  ["хата","house"], ["кімната","room"], ["кухня","kitchen"], ["стілець","chair"], ["ліжко","bed"], ["вікно","window"], ["двері","door"],
+  ["дах","roof"], ["сад","garden"], ["дерево","tree"], ["квітка","flower"], ["тварина","animal"], ["сонце","sun"],
+  ["місяць","moon"], ["зірка","star"], ["хмара","cloud"], ["дощ","rain"], ["сніг","snow"], ["лід","ice"], ["вогонь","fire"], ["вода","water"],
+  ["пісок","sand"], ["камінь","stone"], ["земля","ground"], ["трава","grass"]
 ];
+
 var EN_WORDS_7 = [
   ["яблуко","apple"], ["хліб","bread"], ["молоко","milk"], ["сир","cheese"],
   ["яйце","egg"], ["морква","carrot"], ["картопля","potato"], ["банан","banana"],
@@ -323,6 +330,7 @@ function checkEnglish(opt){
       buttons[i].onclick = null;
     }
     fb("Молодець! ✅", "good");
+    if (PM && PM.emit) PM.emit("answer:correct");
     score++;
     caught++;
     updateStats();
@@ -332,6 +340,7 @@ function checkEnglish(opt){
       if (buttons[k].textContent === opt.toUpperCase()) buttons[k].classList.add("wrong");
     }
     fb("Спробуй ще! ❌", "bad");
+    if (PM && PM.emit) PM.emit("answer:wrong");
   }
 }
 
@@ -366,12 +375,14 @@ function checkAnswer(){
   var fbEl = document.getElementById("feedback");
   if (val === question.correct){
     fb("Молодець! ✅", "good");
+    if (PM && PM.emit) PM.emit("answer:correct");
     score++;
     caught++;
     updateStats();
     catchPokemon();
   } else {
     fb("Спробуй ще! ❌", "bad");
+    if (PM && PM.emit) PM.emit("answer:wrong");
     // do not advance, let child retry
   }
 }
@@ -450,6 +461,7 @@ function catchPokemon(){
     evoEl.style.color = "#c0392b";
   }
   document.getElementById("overlay").classList.add("active");
+  if (PM && PM.emit) PM.emit("catch:done", { evolved: evolved });
   saveGame();
 }
 

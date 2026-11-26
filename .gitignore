@@ -1,0 +1,7 @@
+# macOS
+.DS_Store
+
+# Obsidian editor state
+.obsidian/workspace.json
+
+# Generated kanban scratch
