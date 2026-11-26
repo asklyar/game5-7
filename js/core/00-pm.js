@@ -67,50 +67,6 @@ var PM = window.PM = window.PM || {};
     };
   }
 
-  /* ---------- Settings (PM-00 R9 subset) ---------- */
-  if (!P.settings){
-    var toggles = {};
-    var order = [];
-    function settingsData(){
-      var data = P.store.get("settings", {});
-      return (data && typeof data === "object") ? data : {};
-    }
-    function findToggle(key){
-      for (var i=0;i<order.length;i++){ if (order[i].key === key) return order[i]; }
-      return null;
-    }
-    var S = {
-      registerToggle: function(t){
-        if (!t || !t.key) return;
-        if (!findToggle(t.key)) order.push(t);
-        toggles[t.key] = t;
-        renderSettings();
-      },
-      get: function(key){
-        var data = settingsData();
-        if (data.hasOwnProperty(key)) return data[key];
-        var t = toggles[key];
-        return t ? t["default"] : undefined;
-      },
-      set: function(key, value){
-        var data = settingsData();
-        data[key] = value;
-        P.store.set("settings", data);
-        if (P.emit) P.emit("settings:changed", { key: key, value: value });
-        updateCheckboxes();
-      }
-    };
-    P.settings = S;
-
-    // Register sound setting
-    P.settings.registerToggle({
-      key: "sound",
-      label: "🔊 Звук",
-      "default": true
-    });
-
-  }
-
   /* ---------- Minimal Settings UI ========== */
   var overlay = null, listEl = null;
 
@@ -164,7 +120,8 @@ var PM = window.PM = window.PM || {};
     listEl.innerHTML = "";
     var S = P.settings;
     if (!S || !S.registerToggle) return;
-    for (var i=0;i<order.length;i++){
+    var list = P.settings.list();
+    for (var i=0;i<list.length;i++){
       (function(t){
         var row = document.createElement("label");
         row.className = "pm-setting-row";
@@ -178,7 +135,7 @@ var PM = window.PM = window.PM || {};
         row.appendChild(span);
         row.appendChild(input);
         listEl.appendChild(row);
-      })(order[i]);
+      })(list[i]);
     }
   }
 
@@ -224,7 +181,19 @@ var PM = window.PM = window.PM || {};
     }
   }
 
-  if (document.body) addGear();
-  else document.addEventListener("DOMContentLoaded", addGear);
+  function initSettingsUI(){
+    if (!P.settings || typeof P.settings.registerToggle !== "function") return;
+    P.settings.registerToggle({ key: "sound", label: "🔊 Звук", "default": true });
+    P.settings.registerToggle({ key: "voice", label: "🗣️ Голос", "default": true });
+    P.settings.registerToggle({ key: "animations", label: "✨ Анімації", "default": true });
+    addGear();
+    renderSettings();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSettingsUI);
+  } else {
+    initSettingsUI();
+  }
 
 })();

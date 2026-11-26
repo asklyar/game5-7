@@ -53,7 +53,7 @@ function applyTheme(night){
   if (catBtn) catBtn.textContent = shortLabel;
 }
 function saveTheme(night){
-  try { localStorage.setItem("pokemath_theme", night ? "night" : "day"); } catch(e){}
+  if (PM.settings) PM.settings.set("theme", night ? "night" : "day");
 }
 function toggleTheme(){
   var night = !document.body.classList.contains("night");
@@ -61,8 +61,7 @@ function toggleTheme(){
   saveTheme(night);
 }
 function restoreTheme(){
-  var night = false;
-  try { night = localStorage.getItem("pokemath_theme") === "night"; } catch(e){}
+  var night = !!(PM.settings && PM.settings.get("theme") === "night");
   applyTheme(night);
 }
 restoreTheme();

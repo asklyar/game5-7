@@ -236,7 +236,7 @@
     });
 
     // Listen for settings changes
-    PM.on("settings:changed", function(payload) {
+    PM.on("settings:change", function(payload) {
       if (payload.key === "sound") {
         SOUND_ENABLED = payload.value !== false;
       }
