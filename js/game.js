@@ -101,3 +101,33 @@ document.addEventListener("keydown", function(e){
   else if (e.key === "Escape") clearKey();
 });
 
+
+/* ============ ACTION DELEGATION (T09) ============ */
+(function(){
+  var ACTIONS = {
+    "start": function(el){
+      var parts = (el.getAttribute("data-arg") || "").split(",");
+      startGame(Number(parts[0]), parts[1]);
+    },
+    "press-key": function(el){ pressKey(el.getAttribute("data-arg")); },
+    "delete-key": function(){ delKey(); },
+    "clear-key": function(){ clearKey(); },
+    "check-answer": function(){ checkAnswer(); },
+    "go-menu": function(){ goMenu(); },
+    "open-catalog": function(){ openCatalog(); },
+    "toggle-theme": function(){ toggleTheme(); },
+    "close-modal": function(){ closeModal(); },
+    "close-modal-catalog": function(){ closeModalOpenCatalog(); },
+    "toggle-chain": function(el){
+      var card = el.parentElement;
+      if (card) card.classList.toggle("expanded");
+    }
+  };
+
+  document.addEventListener("click", function(e){
+    var el = e.target && e.target.closest ? e.target.closest("[data-action]") : null;
+    if (!el) return;
+    var fn = ACTIONS[el.getAttribute("data-action")];
+    if (fn) fn(el, e);
+  });
+})();

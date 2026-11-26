@@ -77,7 +77,7 @@ function buildCatalog(){
       '<div class="pstars">' + starsStr(caughtStarsVal) + '</div>' +
       '<div class="ability">' + abilityText + '</div>' +
       '<div class="pevo">' + evoLine + '</div>' +
-      '<div class="chain-toggle" onclick="this.parentElement.classList.toggle(\'expanded\')">▶ Еволюції</div>' +
+      '<div class="chain-toggle" data-action="toggle-chain">▶ Еволюції</div>' +
       '<div class="evo-expand">' + chainHtml + '</div>';
     grid.appendChild(card);
   }
