@@ -1,7 +1,7 @@
 # PokeMath — Requirements & Agent Task List
 
-Audience: local agents (Qwen 27B, 4-bit MLX, in OpenCode / T3 Code). One task = one fresh agent session.
-Owner: Andrew. Written 2026-11-26. Based on a review of the repo (index.html, src/, tests/, kanban/, pokemath-requirements.md, STATUS.md).
+Audience:  agents (Gemini 3.8 Flash). One task = one fresh agent session.
+Owner: Andrew. Written 2026-11-26.
 
 ---
 
