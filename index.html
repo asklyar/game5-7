@@ -119,6 +119,7 @@
 </div>
 
 <script src="js/data/pokemon.js"></script>
+<script src="js/data/words-en.js"></script>
 <script>
 /* ============ DATA: Pokemon (Ukrainian names) ============ */
 /* Українські назви — наближені до спільнотного вживання.
@@ -138,25 +139,9 @@ var caught = 0;
 // collection: id -> current stage index (0-based). -1 / undefined = not caught
 var collection = {};
 
-/* ============ ENGLISH WORD BANKS ([ukrainian, english]) ============ */
-var EN_WORDS_5 = [
-  ["кіт","cat"], ["пес","dog"], ["миша","mouse"], ["пташка","bird"], ["рибка","fish"],
-  ["кінь","horse"], ["овеча","sheep"], ["кролик","rabbit"], ["ведмідь","bear"], ["лев","lion"],
-  ["червоний","red"], ["синій","blue"], ["зелений","green"], ["жовтий","yellow"],
-  ["білий","white"], ["чорний","black"],
-  ["один","one"], ["два","two"], ["три","three"], ["чотири","four"],
-  ["п'ять","five"], ["шість","six"], ["сім","seven"], ["вісім","eight"],
-  ["дев'ять","nine"], ["десять","ten"]
-];
-var EN_WORDS_7 = [
-  ["яблуко","apple"], ["хліб","bread"], ["молоко","milk"], ["сир","cheese"],
-  ["яйце","egg"], ["морква","carrot"], ["картопля","potato"], ["банан","banana"],
-  ["весна","spring"], ["літо","summer"], ["осінь","autumn"], ["зима","winter"],
-  ["ранок","morning"], ["ніч","night"], ["тиждень","week"], ["місяць","month"],
-  ["бігати","run"], ["пливти","swim"], ["співати","sing"], ["танцювати","dance"],
-  ["читати","read"], ["малювати","draw"], ["спати","sleep"], ["їсти","eat"],
-  ["тигр","tiger"], ["вовк","wolf"], ["лиса","fox"], ["кит","whale"]
-];
+/* ============ ENGLISH WORD BANKS (thin aliases over PM.data.words) ============ */
+var EN_WORDS_5 = PM.data.words.grade0.map(function(w){ return [w.uk, w.en]; });
+var EN_WORDS_7 = PM.data.words.grade2.map(function(w){ return [w.uk, w.en]; });
 
 function show(id){
   var screens = document.querySelectorAll(".screen");
