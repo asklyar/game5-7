@@ -33,6 +33,13 @@ Context: the user had already deleted many non-game files from the working tree 
 - **Verified:** `npm test` green — 32 unit + 6 e2e. `registry.js` served 200; smoke test reports no console errors.
 - **NOT verified by the agent:** no in-browser play-through (registry is not yet wired into `js/game.js`; that is T16).
 
+### T16 · Migrate Math (grade 0) to a skill — DONE 2026-11-26
+- **Created** `js/skills/math-add20.js`: registers `math.add20` skill (grade 0 math, 0..20 add/sub within 0..20, non-negative, normalised commutative keys for addition).
+- **Created** `tests/unit/skill-math-add20.test.js` (4 tests): registration verification, 500 seeded questions checking range, contract validity, arithmetic correctness, non-negative results; normalised addition key validation; seed determinism.
+- **Updated** `js/ui/game.js`: `renderMathQuestion` queries `PM.skills.next('math.add20', { tier: 0 })` when `LEVEL === 5` instead of inline generation.
+- **Updated** `index.html`: added `<script src="js/skills/math-add20.js"></script>`.
+- **Verified:** `npm test` green — 36 unit + 6 e2e passing.
+
 ## 0. Executive summary (read first)
 
 **Facts found in the repo**

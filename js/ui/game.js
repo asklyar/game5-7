@@ -29,19 +29,16 @@ function newQuestion(){
 }
 
 function renderMathQuestion(){
-  var a, b, op, correct, text;
+  var text, correct;
   if (LEVEL === 5){
-    // addition & subtraction to 20, result in 0..20
-    if (PM.rnd() < 0.5){
-      a = rnd(0, 20); b = rnd(0, 20 - a);
-      op = "+"; correct = a + b;
-    } else {
-      a = rnd(0, 20); b = rnd(0, a);
-      op = "−"; correct = a - b;
-    }
+    // grade 0: ask the skill registry instead of computing the question
+    // inline (T16). Level 7 stays inline until T17 turns it into skills too.
+    var item = PM.skills.next('math.add20', { tier: 0 });
+    text = item.prompt.text;
+    correct = item.answer;
   } else {
     // level 7: +/− up to 60, and multiplication up to 10
-    var kind = rnd(0, 2);
+    var a, b, op, kind = rnd(0, 2);
     if (kind === 0){            // addition up to 60
       a = rnd(0, 60); b = rnd(0, 60 - a);
       op = "+"; correct = a + b;
@@ -52,8 +49,8 @@ function renderMathQuestion(){
       a = rnd(1, 10); b = rnd(1, 10);
       op = "×"; correct = a * b;
     }
+    text = a + " " + op + " " + b + " = ?";
   }
-  text = a + " " + op + " " + b + " = ?";
   question = { text: text, correct: correct };
   if (PM.noRepeat.check(question, 'math')) {
     renderQuestion();
