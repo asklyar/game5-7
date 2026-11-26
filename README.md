@@ -57,15 +57,28 @@ tests/e2e/*.spec.js    (Playwright)
 
 ## Running tests
 
-Tests are not yet wired up — the harness lands in task **T02**. Until then,
-the only automated check is the data-integrity script:
+One-time setup:
 
 ```sh
-python3 tests/autotest.py     # macOS-only
+npm install
+npx playwright install chromium
 ```
 
-T02 will add `package.json` with `npm test` (unit + e2e). That section will be
-updated when T02 lands.
+Then run everything (Node unit tests + Playwright smoke tests):
+
+```sh
+npm test
+```
+
+Individual suites:
+
+```sh
+npm run test:unit    # node --test tests/unit
+npm run test:e2e     # Playwright, chromium, serves the repo on port 4173
+```
+
+The unit suite is plain `node:test` (Node 18+). Playwright starts
+`python3 -m http.server 4173` automatically when running the e2e tests.
 
 ## Disclaimer
 
